@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Layar Antrian</title>
+    <link rel="stylesheet" href="layar.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <nav class="navbar" aria-label="Navigasi utama">
+        <a class="brand" href="layar.html">
+          <span class="brand-mark" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+          Antrian RS
+        </a>
+        <ul class="nav-links">
+          <li><a href="layar.html" aria-current="page">Layar Antrian</a></li>
+          <li><a href="ambil-antrian.html">Ambil Nomor</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button type="button" id="btn-fullscreen" class="btn btn-ghost">
+            Layar Penuh
+          </button>
+        </div>
+      </nav>
+
+      <header class="page-title">
+        <h1>Nomor Sedang Dipanggil</h1>
+        <p>Diperbarui <span id="last-updated">-</span></p>
+      </header>
+
+      <main>
+        <!-- Kartu per jenis antrian diisi oleh dist/layar.js (polling 2 sampai 3 detik) -->
+        <section
+          id="display-grid"
+          class="card-grid"
+          aria-live="polite"
+        ></section>
+        <p id="empty-state" class="empty-state" hidden>
+          Belum ada jenis antrian yang aktif.
+        </p>
+      </main>
+    </div>
+
+    <template id="display-card-template">
+      <article class="card display-card">
+        <header class="card-head">
+          <h2 class="service-name"></h2>
+          <span class="code-badge"></span>
+        </header>
+        <div class="display-body">
+          <span class="status-dot">Dipanggil</span>
+          <p class="called-number"></p>
+          <p class="empty-note">Belum ada nomor dipanggil</p>
+        </div>
+        <footer class="card-foot">
+          <span class="waiting-count">0</span> tiket menunggu
+        </footer>
+      </article>
+    </template>
+
+    <!-- Jika tim memakai import antar file, ganti menjadi: <script type="module" src="dist/layar.js"></script> -->
+    <script src="dist/layar.js" defer></script>
+  </body>
+</html>

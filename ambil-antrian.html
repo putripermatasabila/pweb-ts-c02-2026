@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ambil Nomor Antrian</title>
+    <link rel="stylesheet" href="ambil-antrian.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <nav class="navbar" aria-label="Navigasi utama">
+        <a class="brand" href="ambil-antrian.html">
+          <span class="brand-mark" aria-hidden="true">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </span>
+          Antrian RS
+        </a>
+        <ul class="nav-links">
+          <li><a href="layar.html">Layar Antrian</a></li>
+          <li>
+            <a href="ambil-antrian.html" aria-current="page">Ambil Nomor</a>
+          </li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-dark" href="login.html">Masuk Staf</a>
+        </div>
+      </nav>
+
+      <header class="hero">
+        <span class="badge">Layanan mandiri pengunjung</span>
+        <h1>Ambil Nomor Antrian<span>Tanpa Perlu Antre di Loket</span></h1>
+        <p>
+          Pilih layanan yang kamu tuju. Nomor langsung masuk ke antrian dan akan
+          dipanggil sesuai urutan.
+        </p>
+      </header>
+
+      <main>
+        <!-- Kartu jenis antrian diisi oleh dist/ambil-antrian.js -->
+        <section id="type-grid" class="card-grid" aria-live="polite"></section>
+        <p id="empty-state" class="empty-state" hidden>
+          Belum ada jenis antrian yang aktif. Hubungi petugas untuk bantuan.
+        </p>
+        <p class="footnote">
+          Jenis antrian baru muncul otomatis. Data diperbarui
+          <span id="last-updated">-</span>
+        </p>
+      </main>
+    </div>
+
+    <template id="type-card-template">
+      <article class="card type-card">
+        <header class="card-head">
+          <h2 class="service-name"></h2>
+          <span class="code-badge"></span>
+        </header>
+        <button
+          type="button"
+          class="btn btn-primary btn-block btn-take"
+          data-priority="Normal"
+        >
+          Ambil Nomor
+        </button>
+        <details class="priority-box">
+          <summary>Ambil dengan prioritas</summary>
+          <div class="priority-options">
+            <button
+              type="button"
+              class="btn btn-ghost btn-take"
+              data-priority="Lansia"
+            >
+              Lansia
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost btn-take"
+              data-priority="Disabilitas"
+            >
+              Disabilitas
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost btn-take"
+              data-priority="VIP"
+            >
+              VIP
+            </button>
+          </div>
+        </details>
+      </article>
+    </template>
+
+    <dialog
+      id="ticket-dialog"
+      class="ticket-dialog"
+      aria-labelledby="ticket-title"
+    >
+      <h2 id="ticket-title" class="service-name">Nomor antrian kamu</h2>
+      <p id="ticket-number" class="ticket-number">A-001</p>
+      <p class="ticket-meta">
+        <span id="ticket-service"></span> <span id="ticket-priority"></span>
+      </p>
+      <p class="ticket-meta"><span id="ticket-waiting"></span></p>
+      <button type="button" id="ticket-close" class="btn btn-primary btn-block">
+        Selesai
+      </button>
+    </dialog>
+
+    <!-- Jika tim memakai import antar file, ganti menjadi: <script type="module" src="dist/ambil-antrian.js"></script> -->
+    <script src="dist/ambil-antrian.js" defer></script>
+  </body>
+</html>
