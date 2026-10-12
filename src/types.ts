@@ -50,3 +50,73 @@ export function getTickets(): Tiket[] {
 export function saveTickets(tickets: Tiket[]): void {
   localStorage.setItem(LS_TICKETS, JSON.stringify(tickets));
 }
+
+// ============================================================
+// Sesi Pengguna & Auth Guard Helper
+// ============================================================
+
+export interface UserSession {
+  token: string;
+  role: string; // "admin" | "moderator" | "user" | dll
+  firstName?: string;
+  username?: string;
+  [key: string]: any;
+}
+
+export function getSession(): UserSession | null {
+  try {
+    const raw = localStorage.getItem(LS_SESSION);
+    if (raw) {
+      return JSON.parse(raw);
+    }
+    // Fallback: periksa key alternatif jika disimpan terpisah
+    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+    const role = localStorage.getItem("role");
+    const firstName = localStorage.getItem("firstName") || localStorage.getItem("username");
+    if (token && role) {
+      return { token, role, firstName: firstName ?? "" };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveSession(session: UserSession): void {
+  localStorage.setItem(LS_SESSION, JSON.stringify(session));
+}
+
+export function clearSession(): void {
+  localStorage.removeItem(LS_SESSION);
+  localStorage.removeItem("token");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("role");
+  localStorage.removeItem("firstName");
+  localStorage.removeItem("username");
+}
+
+// ============================================================
+// Algoritma Antrian Prioritas
+// Tingkatan: VIP (1) > Disabilitas (2) > Lansia (3) > Normal (4)
+// Dalam prioritas sama: Urutan kedatangan (timestamp terlama duluan - FIFO)
+// ============================================================
+
+export const PRIORITY_RANKS: Record<Prioritas, number> = {
+  VIP: 1,
+  Disabilitas: 2,
+  Lansia: 3,
+  Normal: 4,
+};
+
+export function sortTicketsByPriority(tickets: Tiket[]): Tiket[] {
+  return [...tickets].sort((a, b) => {
+    const rankA = PRIORITY_RANKS[a.prioritas] ?? 99;
+    const rankB = PRIORITY_RANKS[b.prioritas] ?? 99;
+    if (rankA !== rankB) {
+      return rankA - rankB; // Nilai rank lebih kecil = prioritas lebih tinggi
+    }
+    // Prioritas sama: urutan kedatangan (timestamp terkecil / lebih awal duluan)
+    return a.timestamp - b.timestamp;
+  });
+}
+

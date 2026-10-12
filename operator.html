@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel Operator - Antrian RS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="operator.css" />
+
+    <!-- Auth Guard Eksekusi Awal: Cegah flicker halaman jika belum login -->
+    <script>
+      (function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("demo") === "1" || urlParams.get("dev") === "1") {
+          return;
+        }
+        try {
+          const raw = localStorage.getItem("currentSession");
+          const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+          if (!raw && !token) {
+            window.location.replace("login.html");
+          }
+        } catch (e) {
+          window.location.replace("login.html");
+        }
+      })();
+    </script>
+
+    <!-- Skrip Aplikasi Operator dengan atribut defer -->
+    <script src="dist/operator.js" defer></script>
+  </head>
+  <body>
+    <div class="shell">
+      <!-- Navbar Utama -->
+      <nav class="navbar" aria-label="Navigasi Utama">
+        <a class="brand" href="operator.html">
+          <img
+            src="1600w-iYOMf9zQ8c0.webp"
+            alt="Logo Rumah Sakit"
+            class="brand-logo"
+            width="34"
+            height="34"
+          />
+          Antrian RS
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="layar.html">Layar Antrian</a></li>
+          <li><a href="ambil-antrian.html">Ambil Nomor</a></li>
+          <li><a href="operator.html" aria-current="page">Panel Operator</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <div class="user-pill" id="user-profile-badge">
+            <span class="user-avatar" aria-hidden="true">OP</span>
+            <div>
+              <span id="user-name">Operator</span>
+              <span
+                id="user-role"
+                class="badge badge-normal"
+                style="font-size: 0.68rem; padding: 2px 6px; margin-left: 4px;"
+                >OPERATOR</span
+              >
+            </div>
+          </div>
+          <button
+            type="button"
+            id="btn-logout"
+            class="btn btn-sm btn-ghost"
+            title="Keluar dari sesi"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Keluar
+          </button>
+        </div>
+      </nav>
+
+      <!-- Header Halaman Operator & Filter Loket -->
+      <header class="operator-header">
+        <div class="operator-title">
+          <h1>Panel Pemanggilan Antrian</h1>
+          <p>
+            Kelola giliran pasien dengan pemanggilan prioritas (VIP, Disabilitas, Lansia didahulukan).
+          </p>
+        </div>
+
+        <div class="filter-box">
+          <label for="service-filter">Loket / Layanan:</label>
+          <select id="service-filter">
+            <option value="ALL">Semua Layanan Antrian</option>
+          </select>
+        </div>
+      </header>
+
+      <!-- Statistik Ringkasan -->
+      <section class="stats-grid" aria-label="Statistik Antrian">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-waiting" style="color: #d97706;">0</div>
+          <div class="stat-label">Menunggu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-active" style="color: #059669;">0</div>
+          <div class="stat-label">Sedang Dipanggil</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-finished" style="color: #2563eb;">0</div>
+          <div class="stat-label">Selesai Dilayani</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-skipped" style="color: #dc2626;">0</div>
+          <div class="stat-label">Dilewati</div>
+        </div>
+      </section>
+
+      <!-- Tata Letak 2 Kolom Operator -->
+      <main class="operator-layout">
+        <!-- Kolom Kiri: Panel Panggilan Aktif -->
+        <section aria-labelledby="active-call-title">
+          <h2 id="active-call-title" class="sr-only">Panel Panggilan Aktif</h2>
+
+          <!-- Kartu Pemanggilan Utama -->
+          <div class="active-call-card">
+            <div id="active-serving-status">
+              <span class="status-idle">
+                <span class="idle-dot"></span> Siap Memanggil
+              </span>
+            </div>
+
+            <div id="active-ticket-num" class="active-ticket-num empty">---</div>
+            <h3 id="active-ticket-service" class="active-ticket-service">Semua Layanan Antrian</h3>
+
+            <div id="active-ticket-badges" class="active-ticket-badges"></div>
+            <div id="active-ticket-meta" class="active-ticket-meta">
+              Tekan tombol "Panggil Berikutnya" untuk memulai antrian.
+            </div>
+
+            <!-- Dek Tombol Aksi Operator -->
+            <div class="action-deck">
+              <!-- Tombol Panggil Berikutnya -->
+              <button
+                type="button"
+                id="btn-call-next"
+                class="btn btn-success action-btn-call-next"
+                title="Selesaikan tiket saat ini dan panggil antrian prioritas berikutnya"
+              >
+                <svg
+                  class="action-btn-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Panggil Berikutnya
+              </button>
+
+              <!-- Tombol Panggil Ulang -->
+              <button
+                type="button"
+                id="btn-recall"
+                class="btn btn-ghost"
+                disabled
+                title="Panggil ulang nomor ini dengan efek suara & Text-to-Speech"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M1 4v6h6"></path>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                Panggil Ulang
+              </button>
+
+              <!-- Tombol Selesai -->
+              <button
+                type="button"
+                id="btn-finish"
+                class="btn btn-dark"
+                disabled
+                title="Menutup tiket yang sedang dipanggil tanpa otomatis memanggil antrian berikutnya"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Selesai
+              </button>
+
+              <!-- Tombol Lewati (Pindah ke Belakang Antrian) -->
+              <button
+                type="button"
+                id="btn-skip"
+                class="btn btn-warning"
+                disabled
+                title="Pindahkan tiket aktif ke antrian paling belakang (status: Menunggu)"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                  <line x1="19" y1="5" x2="19" y2="19"></line>
+                </svg>
+                Lewati (Ke Belakang)
+              </button>
+
+              <!-- Tombol Tandai Dilewati -->
+              <button
+                type="button"
+                id="btn-skip-mark"
+                class="btn btn-danger"
+                disabled
+                title="Tandai tiket ini sebagai status 'Dilewati' jika pasien tidak hadir"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                Tandai Dilewati
+              </button>
+            </div>
+          </div>
+
+          <!-- Pengaturan Suara Panggilan & Text-to-Speech (Bonus Nilai) -->
+          <div class="audio-card">
+            <div class="audio-header">
+              <div class="audio-title">
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <span>Respon Audio & Text-to-Speech</span>
+              </div>
+
+              <!-- Switch Aktifkan Suara -->
+              <label class="switch" title="Aktif / Nonaktifkan Suara Panggilan">
+                <input type="checkbox" id="audio-toggle" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="audio-controls">
+              <button
+                type="button"
+                id="btn-test-audio"
+                class="btn btn-sm btn-ghost"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Uji Suara & TTS
+              </button>
+
+              <!-- Indikator Animasi Gelombang Suara saat Berbicara -->
+              <div id="speaking-indicator" class="speaking-indicator">
+                <span class="sound-wave">
+                  <span class="sound-bar"></span>
+                  <span class="sound-bar"></span>
+                  <span class="sound-bar"></span>
+                  <span class="sound-bar"></span>
+                </span>
+                <span>Mengumumkan antrian...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Kolom Kanan: Daftar Antrian & Antrian Prioritas -->
+        <section class="card" aria-labelledby="queue-list-title">
+          <div class="card-header">
+            <div>
+              <h2 id="queue-list-title" class="card-title">Daftar Antrian</h2>
+              <p class="card-subtitle">
+                Urutan otomatis diatur menurut algoritma prioritas
+              </p>
+            </div>
+            <!-- Tombol Bantuan Seed Data Pengujian -->
+            <button
+              type="button"
+              id="btn-seed-demo-tickets"
+              class="btn btn-sm btn-outline"
+              title="Isi data uji tiket dengan ragam prioritas (VIP, Lansia, Disabilitas, Normal)"
+            >
+              + Tiket Demo
+            </button>
+          </div>
+
+          <!-- Tab Kategori Antrian -->
+          <nav class="queue-tabs" aria-label="Kategori Antrian">
+            <button type="button" id="tab-waiting" class="tab-btn active">
+              Menunggu <span class="tab-count" id="count-waiting">0</span>
+            </button>
+            <button type="button" id="tab-skipped" class="tab-btn">
+              Dilewati <span class="tab-count" id="count-skipped">0</span>
+            </button>
+            <button type="button" id="tab-finished" class="tab-btn">
+              Selesai <span class="tab-count" id="count-finished">0</span>
+            </button>
+          </nav>
+
+          <!-- List Antrian -->
+          <div class="card-body" style="max-height: 520px; overflow-y: auto;">
+            <ul id="queue-container" class="queue-list"></ul>
+
+            <!-- Empty State -->
+            <div id="empty-queue-state" class="empty-state" hidden>
+              <svg
+                class="empty-state-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <p class="empty-state-text">Tidak ada antrian pada kategori ini.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Kontainer Notifikasi Toast -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  </body>
+</html>
+

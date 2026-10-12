@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx esbuild src/ambil-antrian.ts src/layar.ts --bundle --outdir=dist --target=es2017 --platform=browser",
-    "build:watch": "npx esbuild src/ambil-antrian.ts src/layar.ts --bundle --outdir=dist --target=es2017 --platform=browser --watch",
+    "build": "npx esbuild src/ambil-antrian.ts src/layar.ts src/operator.ts --bundle --outdir=dist --target=es2017 --platform=browser",
+    "build:watch": "npx esbuild src/ambil-antrian.ts src/layar.ts src/operator.ts --bundle --outdir=dist --target=es2017 --platform=browser --watch",
     "typecheck": "npx tsc --noEmit"
   },
   "repository": {
