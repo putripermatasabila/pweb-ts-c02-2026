@@ -14,7 +14,7 @@
   --radius-card: 20px;
   --radius-pill: 999px;
   --shadow-soft: 0 10px 30px rgba(30, 50, 110, 0.08);
-  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -74,14 +74,12 @@ body {
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
+.brand-logo {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #3b6cf0, var(--primary-dark));
-  color: #fff;
+  object-fit: cover;
+  display: block;
 }
 
 .nav-links {

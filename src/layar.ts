@@ -39,24 +39,20 @@ function renderCard(jenis: JenisAntrian): void {
   const clone = template.content.cloneNode(true) as DocumentFragment;
   const card = clone.querySelector(".display-card") as HTMLElement;
 
-  // Set id agar bisa di-update saat polling tanpa flicker
   card.dataset.kode = jenis.kode;
 
   (card.querySelector(".service-name") as HTMLElement).textContent = jenis.nama;
   (card.querySelector(".code-badge") as HTMLElement).textContent = jenis.kode;
 
   const calledNumberEl = card.querySelector(".called-number") as HTMLElement;
-  const emptyNoteEl = card.querySelector(".empty-note") as HTMLElement;
   const waitingEl = card.querySelector(".waiting-count") as HTMLElement;
 
   const called = getCalledTicket(jenis.kode);
   if (called) {
     calledNumberEl.textContent = called.nomorTiket;
-    calledNumberEl.hidden = false;
-    emptyNoteEl.hidden = true;
+    card.classList.remove("is-empty");
   } else {
-    calledNumberEl.hidden = true;
-    emptyNoteEl.hidden = false;
+    card.classList.add("is-empty");
   }
 
   waitingEl.textContent = String(waitingCount(jenis.kode));
@@ -74,17 +70,14 @@ function updateCard(jenis: JenisAntrian): void {
   if (!card) return;
 
   const calledNumberEl = card.querySelector(".called-number") as HTMLElement;
-  const emptyNoteEl = card.querySelector(".empty-note") as HTMLElement;
   const waitingEl = card.querySelector(".waiting-count") as HTMLElement;
 
   const called = getCalledTicket(jenis.kode);
   if (called) {
     calledNumberEl.textContent = called.nomorTiket;
-    calledNumberEl.hidden = false;
-    emptyNoteEl.hidden = true;
+    card.classList.remove("is-empty");
   } else {
-    calledNumberEl.hidden = true;
-    emptyNoteEl.hidden = false;
+    card.classList.add("is-empty");
   }
 
   waitingEl.textContent = String(waitingCount(jenis.kode));
@@ -134,23 +127,37 @@ function syncDisplay(): void {
 // ============================================================
 // Fullscreen API
 // ============================================================
+function updateFullscreenIcon(): void {
+  const isFullscreen = !!document.fullscreenElement;
+  btnFullscreen.setAttribute(
+    "title",
+    isFullscreen ? "Keluar Layar Penuh" : "Layar Penuh"
+  );
+  btnFullscreen.setAttribute(
+    "aria-label",
+    isFullscreen ? "Keluar Layar Penuh" : "Layar Penuh"
+  );
+
+  btnFullscreen.innerHTML = isFullscreen
+    ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+      </svg>`
+    : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>`;
+}
+
 function toggleFullscreen(): void {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().catch(() => {
       // Browser tidak mendukung atau permission ditolak
     });
-    btnFullscreen.textContent = "Keluar Layar Penuh";
   } else {
     document.exitFullscreen();
-    btnFullscreen.textContent = "Layar Penuh";
   }
 }
 
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
-    btnFullscreen.textContent = "Layar Penuh";
-  }
-});
+document.addEventListener("fullscreenchange", updateFullscreenIcon);
 
 // ============================================================
 // Inisialisasi

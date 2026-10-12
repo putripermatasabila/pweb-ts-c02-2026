@@ -4,25 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Layar Antrian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="layar.css" />
   </head>
   <body>
     <div class="shell">
       <nav class="navbar" aria-label="Navigasi utama">
         <a class="brand" href="layar.html">
-          <span class="brand-mark" aria-hidden="true">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-            >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </span>
+          <img
+            src="1600w-iYOMf9zQ8c0.webp"
+            alt="Logo Rumah Sakit"
+            class="brand-logo"
+            width="34"
+            height="34"
+          />
           Antrian RS
         </a>
         <ul class="nav-links">
@@ -30,8 +30,26 @@
           <li><a href="ambil-antrian.html">Ambil Nomor</a></li>
         </ul>
         <div class="nav-actions">
-          <button type="button" id="btn-fullscreen" class="btn btn-ghost">
-            Layar Penuh
+          <button
+            type="button"
+            id="btn-fullscreen"
+            class="btn btn-icon btn-ghost"
+            title="Layar Penuh"
+            aria-label="Layar Penuh"
+          >
+            <svg
+              id="icon-fullscreen"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+            </svg>
           </button>
         </div>
       </nav>
