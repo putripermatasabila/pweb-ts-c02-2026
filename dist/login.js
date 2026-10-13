@@ -107,16 +107,22 @@
         });
         if (isLoading) {
           btnSubmit.disabled = true;
+          btnSubmit.classList.add("is-loading");
           inputUsername.disabled = true;
           inputPassword.disabled = true;
           btnSubmitSpinner.hidden = false;
+          btnSubmitSpinner.style.display = "inline-block";
+          btnSubmitSpinner.classList.add("is-loading");
           btnSubmitText.textContent = "Memverifikasi Kredensial...";
           clearError();
         } else {
           btnSubmit.disabled = false;
+          btnSubmit.classList.remove("is-loading");
           inputUsername.disabled = false;
           inputPassword.disabled = false;
           btnSubmitSpinner.hidden = true;
+          btnSubmitSpinner.style.display = "none";
+          btnSubmitSpinner.classList.remove("is-loading");
           btnSubmitText.textContent = "Masuk Sekarang";
         }
       }
@@ -240,6 +246,7 @@
         }
       }
       function init() {
+        setLoading(false);
         checkExistingSession();
         form.addEventListener("submit", handleLogin);
         inputUsername.addEventListener("input", clearError);

@@ -2,90 +2,102 @@
    login.css - Gaya Tampilan Khusus Halaman Login Antrian RS
    Disusun oleh: Satya
    Ketentuan: Wajib Pure Native CSS (tanpa framework/library)
+   Desain terpadu dengan sistem desain antrian rumah sakit
    ============================================================ */
 
+/* Pastikan semua elemen tersembunyi tidak pernah muncul di layar */
+[hidden],
+.spinner[hidden] {
+  display: none !important;
+}
+
 .login-page-container {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 140px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 16px;
+  padding: 32px 16px 48px;
 }
 
 .login-box {
   width: 100%;
-  max-width: 480px;
-  background: var(--surface);
+  max-width: 460px;
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.95);
-  border-radius: 28px;
-  box-shadow: 0 20px 50px rgba(30, 50, 110, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
-  padding: 36px 32px;
+  border-radius: 24px;
+  box-shadow: 0 20px 45px rgba(30, 50, 110, 0.08), 0 1px 3px rgba(0, 0, 0, 0.03);
+  padding: 36px 32px 32px;
   position: relative;
-  overflow: hidden;
-}
-
-.login-box::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, #1d4ed8, #3b82f6, #60a5fa);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.login-header .brand-badge {
+/* Badge Melayang Elegan (Selaras dengan Layanan mandiri pengunjung) */
+.brand-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background: var(--primary-light);
-  border: 1px solid var(--primary-border);
+  gap: 6px;
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #e3e7f2;
   border-radius: var(--radius-pill);
-  color: var(--primary);
+  color: var(--muted);
   font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  margin-bottom: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 12px;
+}
+
+.brand-badge svg {
+  stroke: var(--primary);
 }
 
 .login-header h1 {
-  font-size: 1.65rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--ink);
   margin: 0 0 8px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
 }
 
 .login-header p {
   color: var(--muted);
-  font-size: 0.92rem;
-  margin: 0;
+  font-size: 0.9rem;
+  margin: 0 auto;
+  line-height: 1.5;
+  max-width: 340px;
 }
 
-/* Kotak Pesan Error & Sukses */
+/* Alert Notifikasi Error & Sukses */
 .login-alert {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-  font-size: 0.88rem;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.86rem;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   line-height: 1.45;
-  transition: all var(--transition-normal);
+  animation: slideDown 0.25s ease;
 }
 
-.login-alert[hidden] {
-  display: none !important;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .login-alert-danger {
@@ -112,6 +124,42 @@
   margin-top: 2px;
 }
 
+/* Input Kontrol Modern */
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: #ffffff;
+  border: 1.5px solid #e3e7f2;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+.form-control:focus {
+  border-color: #2f62ea;
+  box-shadow: 0 0 0 3.5px rgba(47, 98, 234, 0.15);
+}
+
 /* Input Password dengan Icon Toggle */
 .password-input-wrapper {
   position: relative;
@@ -130,27 +178,71 @@
   border: none;
   color: var(--muted);
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color var(--transition-fast);
+  transition: color 0.15s ease;
 }
 
 .btn-toggle-password:hover {
   color: var(--ink);
 }
 
-/* Spinner Loading pada Tombol */
+/* Tombol Masuk Sekarang (Selaras dengan Tombol Ambil Nomor) */
+.btn-login-submit {
+  width: 100%;
+  margin-top: 8px;
+  padding: 13px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(180deg, #386df8, #2351eb);
+  border: none;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px rgba(35, 81, 235, 0.35);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-login-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(180deg, #2f62ea, #1e45d4);
+  box-shadow: 0 12px 24px rgba(35, 81, 235, 0.45);
+}
+
+.btn-login-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-login-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Spinner Loading pada Tombol: Default TIDAK TAMPIL */
 .spinner {
+  display: none !important;
   width: 18px;
   height: 18px;
   border: 2.5px solid rgba(255, 255, 255, 0.35);
   border-top-color: #ffffff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  display: inline-block;
   flex-shrink: 0;
+}
+
+/* Hanya tampil jika sedang aktif loading */
+.spinner.is-loading,
+#btn-submit.is-loading .spinner,
+.btn-login-submit.is-loading .spinner {
+  display: inline-block !important;
 }
 
 @keyframes spin {
@@ -161,9 +253,9 @@
 
 /* Petunjuk Akun Uji (Quick Credentials Box) */
 .test-accounts-box {
-  margin-top: 28px;
-  padding-top: 22px;
-  border-top: 1px dashed var(--line-strong);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed #e3e7f2;
 }
 
 .test-accounts-title {
@@ -171,19 +263,20 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--ink-secondary);
-  margin-bottom: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .test-accounts-badge {
-  font-size: 0.72rem;
-  background: var(--surface-soft);
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.8);
   color: var(--muted);
   padding: 2px 8px;
+  border: 1px solid #e3e7f2;
   border-radius: var(--radius-pill);
   font-weight: 600;
 }
@@ -199,17 +292,18 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 10px 14px;
-  background: #ffffff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  font-size: 0.84rem;
-  transition: border-color var(--transition-fast), background var(--transition-fast);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e3e7f2;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  transition: all 0.15s ease;
 }
 
 .test-account-item:hover {
-  border-color: var(--primary-border);
-  background: #f8fafc;
+  background: #ffffff;
+  border-color: #bfdbfe;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.05);
 }
 
 .test-account-info {
@@ -224,44 +318,51 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  font-size: 0.84rem;
 }
 
 .test-account-meta {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-family: monospace;
 }
 
 .btn-fill-account {
-  font-size: 0.76rem;
-  padding: 4px 10px;
+  font-size: 0.74rem;
+  padding: 4px 11px;
   border-radius: var(--radius-pill);
-  background: var(--primary-light);
+  background: #eff6ff;
   color: var(--primary);
-  border: 1px solid var(--primary-border);
+  border: 1px solid #bfdbfe;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
-  transition: all var(--transition-fast);
+  transition: all 0.15s ease;
 }
 
-.btn-fill-account:hover {
+.btn-fill-account:hover:not(:disabled) {
   background: var(--primary);
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-fill-account:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Sesi Aktif Box jika sudah login */
 .already-logged-in-box {
-  padding: 16px;
+  padding: 14px 16px;
   background: #eff6ff;
-  border: 1.5px solid var(--primary-border);
-  border-radius: var(--radius-md);
-  margin-bottom: 20px;
-  font-size: 0.9rem;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  font-size: 0.88rem;
 }
 
 .already-logged-in-box p {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--ink);
 }
 
@@ -273,7 +374,7 @@
 
 @media (max-width: 480px) {
   .login-box {
-    padding: 24px 20px;
+    padding: 28px 20px;
     border-radius: 20px;
   }
 }

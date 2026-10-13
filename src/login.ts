@@ -66,16 +66,22 @@ function setLoading(isLoading: boolean): void {
 
   if (isLoading) {
     btnSubmit.disabled = true;
+    btnSubmit.classList.add("is-loading");
     inputUsername.disabled = true;
     inputPassword.disabled = true;
     btnSubmitSpinner.hidden = false;
+    btnSubmitSpinner.style.display = "inline-block";
+    btnSubmitSpinner.classList.add("is-loading");
     btnSubmitText.textContent = "Memverifikasi Kredensial...";
     clearError();
   } else {
     btnSubmit.disabled = false;
+    btnSubmit.classList.remove("is-loading");
     inputUsername.disabled = false;
     inputPassword.disabled = false;
     btnSubmitSpinner.hidden = true;
+    btnSubmitSpinner.style.display = "none";
+    btnSubmitSpinner.classList.remove("is-loading");
     btnSubmitText.textContent = "Masuk Sekarang";
   }
 }
@@ -261,6 +267,9 @@ async function handleLogin(e: Event): Promise<void> {
 // Event Listeners & Inisialisasi
 // ============================================================
 function init(): void {
+  // Pastikan tombol dalam keadaan normal dan spinner tersembunyi
+  setLoading(false);
+
   // Cek apakah ada sesi aktif sebelumnya
   checkExistingSession();
 
