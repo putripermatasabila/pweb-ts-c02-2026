@@ -164,6 +164,11 @@
         seedIfEmpty();
         syncDisplay();
         setInterval(syncDisplay, 2e3);
+        window.addEventListener("storage", (e) => {
+          if (e.key === "tickets" || e.key === "queueTypes") {
+            syncDisplay();
+          }
+        });
         btnFullscreen.addEventListener("click", toggleFullscreen);
       }
       init();

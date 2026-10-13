@@ -140,6 +140,13 @@ function init(): void {
   // Polling setiap 3 detik agar sinkron dengan perubahan dari halaman lain
   setInterval(render, 3000);
 
+  // Sinkronisasi instan via event storage
+  window.addEventListener("storage", (e) => {
+    if (e.key === LS_QUEUE_TYPES) {
+      render();
+    }
+  });
+
   // Tombol tutup dialog
   ticketClose.addEventListener("click", () => {
     dialog.close();

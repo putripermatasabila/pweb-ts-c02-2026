@@ -133,6 +133,11 @@
         seedIfEmpty();
         render();
         setInterval(render, 3e3);
+        window.addEventListener("storage", (e) => {
+          if (e.key === LS_QUEUE_TYPES) {
+            render();
+          }
+        });
         ticketClose.addEventListener("click", () => {
           dialog.close();
         });

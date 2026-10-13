@@ -180,6 +180,13 @@ function init(): void {
   // Polling setiap 2 detik sesuai spesifikasi
   setInterval(syncDisplay, 2000);
 
+  // Sinkronisasi instan via event storage
+  window.addEventListener("storage", (e) => {
+    if (e.key === "tickets" || e.key === "queueTypes") {
+      syncDisplay();
+    }
+  });
+
   btnFullscreen.addEventListener("click", toggleFullscreen);
 }
 

@@ -51,6 +51,10 @@ export function saveTickets(tickets: Tiket[]): void {
   localStorage.setItem(LS_TICKETS, JSON.stringify(tickets));
 }
 
+export function saveQueueTypes(queueTypes: JenisAntrian[]): void {
+  localStorage.setItem(LS_QUEUE_TYPES, JSON.stringify(queueTypes));
+}
+
 // ============================================================
 // Sesi Pengguna & Auth Guard Helper
 // ============================================================
@@ -84,6 +88,20 @@ export function getSession(): UserSession | null {
 
 export function saveSession(session: UserSession): void {
   localStorage.setItem(LS_SESSION, JSON.stringify(session));
+  // Sinkronkan key individual agar kompatibel dengan skrip inline & halaman lain
+  if (session.token) {
+    localStorage.setItem("token", session.token);
+    localStorage.setItem("accessToken", session.token);
+  }
+  if (session.role) {
+    localStorage.setItem("role", session.role);
+  }
+  if (session.firstName) {
+    localStorage.setItem("firstName", session.firstName);
+  }
+  if (session.username) {
+    localStorage.setItem("username", session.username);
+  }
 }
 
 export function clearSession(): void {

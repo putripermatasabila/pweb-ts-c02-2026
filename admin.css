@@ -1,0 +1,344 @@
+/* ============================================================
+   admin.css - Gaya Tampilan Khusus Dashboard Admin Antrian RS
+   Disusun oleh: Satya
+   Ketentuan: Wajib Pure Native CSS (tanpa framework/library)
+   ============================================================ */
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.admin-header-title h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+
+.admin-header-title p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Layout Grid Dashboard: Form Input & Daftar */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 992px) {
+  .admin-grid-two-cols {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+}
+
+/* Tabel Data Native */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.native-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.native-table th {
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px;
+  border-bottom: 1.5px solid var(--line);
+  white-space: nowrap;
+}
+
+.native-table th:first-child {
+  border-top-left-radius: var(--radius-sm);
+}
+
+.native-table th:last-child {
+  border-top-right-radius: var(--radius-sm);
+}
+
+.native-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+.native-table tr:last-child td {
+  border-bottom: none;
+}
+
+.native-table tr:hover td {
+  background: rgba(241, 245, 249, 0.6);
+}
+
+/* Toggle Switch Kustom Native */
+.toggle-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 8px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: #cbd5e1;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #10b981;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.toggle-label.active {
+  color: #059669;
+}
+
+.toggle-label.inactive {
+  color: #64748b;
+}
+
+/* Kotak Error Form Inline */
+.form-feedback {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-feedback.is-error {
+  color: #dc2626;
+  display: block;
+}
+
+/* Card Badge Status */
+.service-code-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  border: 1.5px solid var(--primary-border);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+/* Modal Dialog Cetak Tiket */
+.ticket-modal-content {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  max-width: 420px;
+  width: 90vw;
+  box-shadow: var(--shadow-lg);
+  margin: auto;
+  text-align: center;
+}
+
+.ticket-modal-content::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.ticket-print-box {
+  background: #fafaf9;
+  border: 2px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin: 18px 0;
+  text-align: center;
+}
+
+.ticket-print-box .ticket-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.ticket-print-box .ticket-service-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+.ticket-print-box .ticket-time {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* Modal Konfirmasi */
+.confirm-modal-content {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 28px;
+  max-width: 440px;
+  width: 90vw;
+  box-shadow: var(--shadow-lg);
+  margin: auto;
+  text-align: center;
+}
+
+.confirm-modal-content::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.confirm-modal-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Badge Tipe Layanan Status */
+.badge-aktif {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.badge-nonaktif {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+/* Prioritas Selector Radio */
+.priority-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.priority-option {
+  position: relative;
+}
+
+.priority-option input {
+  position: absolute;
+  opacity: 0;
+}
+
+.priority-option label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.priority-option input:checked + label {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+/* Print Styling */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .ticket-print-box, .ticket-print-box * {
+    visibility: visible;
+  }
+  .ticket-print-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border: none;
+  }
+}

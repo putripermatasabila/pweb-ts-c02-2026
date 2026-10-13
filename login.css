@@ -1,0 +1,279 @@
+/* ============================================================
+   login.css - Gaya Tampilan Khusus Halaman Login Antrian RS
+   Disusun oleh: Satya
+   Ketentuan: Wajib Pure Native CSS (tanpa framework/library)
+   ============================================================ */
+
+.login-page-container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(30, 50, 110, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6, #60a5fa);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-header .brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-pill);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+
+.login-header h1 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.login-header p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+/* Kotak Pesan Error & Sukses */
+.login-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.45;
+  transition: all var(--transition-normal);
+}
+
+.login-alert[hidden] {
+  display: none !important;
+}
+
+.login-alert-danger {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  color: #991b1b;
+}
+
+.login-alert-danger svg {
+  stroke: #dc2626;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.login-alert-success {
+  background: #ecfdf5;
+  border: 1.5px solid #a7f3d0;
+  color: #065f46;
+}
+
+.login-alert-success svg {
+  stroke: #059669;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Input Password dengan Icon Toggle */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper .form-control {
+  padding-right: 44px;
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.btn-toggle-password:hover {
+  color: var(--ink);
+}
+
+/* Spinner Loading pada Tombol */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Petunjuk Akun Uji (Quick Credentials Box) */
+.test-accounts-box {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.test-accounts-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.test-accounts-badge {
+  font-size: 0.72rem;
+  background: var(--surface-soft);
+  color: var(--muted);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.test-accounts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.test-account-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.test-account-item:hover {
+  border-color: var(--primary-border);
+  background: #f8fafc;
+}
+
+.test-account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.test-account-name {
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.test-account-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-family: monospace;
+}
+
+.btn-fill-account {
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.btn-fill-account:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+/* Sesi Aktif Box jika sudah login */
+.already-logged-in-box {
+  padding: 16px;
+  background: #eff6ff;
+  border: 1.5px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.already-logged-in-box p {
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.already-logged-in-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+}

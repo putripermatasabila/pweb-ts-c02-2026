@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Masuk Staf - Antrian RS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="login.css" />
+
+    <!-- Skrip Aplikasi Login dengan atribut defer -->
+    <script src="dist/login.js" defer></script>
+  </head>
+  <body>
+    <div class="shell">
+      <!-- Navbar Sederhana -->
+      <nav class="navbar" aria-label="Navigasi Utama">
+        <a class="brand" href="ambil-antrian.html">
+          <img
+            src="1600w-iYOMf9zQ8c0.webp"
+            alt="Logo Rumah Sakit"
+            class="brand-logo"
+            width="34"
+            height="34"
+          />
+          Antrian RS
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="layar.html">Layar Antrian</a></li>
+          <li><a href="ambil-antrian.html">Ambil Nomor</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a class="btn btn-sm btn-ghost" href="ambil-antrian.html">
+            ← Layanan Mandiri
+          </a>
+        </div>
+      </nav>
+
+      <!-- Area Form Login -->
+      <main class="login-page-container">
+        <section class="login-box" aria-labelledby="login-heading">
+          <header class="login-header">
+            <span class="brand-badge">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Portal Petugas Medis & Admin
+            </span>
+            <h1 id="login-heading">Masuk ke Sistem</h1>
+            <p>Masukkan kredensial akun Anda untuk mengakses panel antrian</p>
+          </header>
+
+          <!-- Banner Notifikasi jika Sesi Sudah Aktif -->
+          <div id="already-logged-box" class="already-logged-in-box" hidden>
+            <p>
+              Anda sedang masuk sebagai:
+              <strong id="logged-username"></strong> (<span id="logged-role"></span>)
+            </p>
+            <div class="already-logged-in-actions">
+              <a id="btn-continue-session" href="index.html" class="btn btn-sm btn-primary">
+                Lanjut ke Halaman
+              </a>
+              <button type="button" id="btn-clear-session" class="btn btn-sm btn-ghost">
+                Ganti Akun
+              </button>
+            </div>
+          </div>
+
+          <!-- Alert Error Visual -->
+          <div
+            id="login-error"
+            class="login-alert login-alert-danger"
+            role="alert"
+            hidden
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span id="login-error-text">Terjadi kesalahan saat verifikasi.</span>
+          </div>
+
+          <!-- Alert Sukses Visual -->
+          <div
+            id="login-success"
+            class="login-alert login-alert-success"
+            role="status"
+            hidden
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <span id="login-success-text">Login berhasil! Mengalihkan ke halaman...</span>
+          </div>
+
+          <!-- Form Login Utama -->
+          <form id="login-form" autocomplete="on" novalidate>
+            <div class="form-group">
+              <label for="input-username" class="form-label">Username</label>
+              <input
+                type="text"
+                id="input-username"
+                name="username"
+                class="form-control"
+                placeholder="Contoh: emilys"
+                required
+                autocomplete="username"
+                autofocus
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="input-password" class="form-label">Password</label>
+              <div class="password-input-wrapper">
+                <input
+                  type="password"
+                  id="input-password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Masukkan password"
+                  required
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  id="btn-toggle-password"
+                  class="btn-toggle-password"
+                  title="Lihat / Sembunyikan Password"
+                  aria-label="Lihat password"
+                >
+                  <svg
+                    id="eye-icon"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="btn-submit"
+              class="btn btn-primary btn-block btn-lg"
+              style="margin-top: 10px;"
+            >
+              <span id="btn-submit-spinner" class="spinner" hidden></span>
+              <span id="btn-submit-text">Masuk Sekarang</span>
+            </button>
+          </form>
+
+          <!-- Petunjuk Akun Uji DummyJSON -->
+          <aside class="test-accounts-box" aria-label="Akun Uji Pengembang">
+            <div class="test-accounts-title">
+              <span>Petunjuk Akun Uji</span>
+              <span class="test-accounts-badge">dummyjson API</span>
+            </div>
+            <div class="test-accounts-grid">
+              <!-- Akun Admin -->
+              <div class="test-account-item">
+                <div class="test-account-info">
+                  <span class="test-account-name">
+                    <span class="badge badge-vip" style="font-size: 0.7rem; padding: 2px 7px;">ADMIN</span>
+                    Emily Johnson
+                  </span>
+                  <span class="test-account-meta">user: <strong>emilys</strong> · pass: <strong>emilyspass</strong></span>
+                </div>
+                <button
+                  type="button"
+                  class="btn-fill-account"
+                  data-user="emilys"
+                  data-pass="emilyspass"
+                  title="Gunakan akun ini untuk uji coba"
+                >
+                  Gunakan
+                </button>
+              </div>
+
+              <!-- Akun Moderator -->
+              <div class="test-account-item">
+                <div class="test-account-info">
+                  <span class="test-account-name">
+                    <span class="badge badge-disabilitas" style="font-size: 0.7rem; padding: 2px 7px;">MODERATOR</span>
+                    Olivia Wilson
+                  </span>
+                  <span class="test-account-meta">user: <strong>oliviaw</strong> · pass: <strong>oliviawpass</strong></span>
+                </div>
+                <button
+                  type="button"
+                  class="btn-fill-account"
+                  data-user="oliviaw"
+                  data-pass="oliviawpass"
+                  title="Gunakan akun ini untuk uji coba"
+                >
+                  Gunakan
+                </button>
+              </div>
+
+              <!-- Akun User Biasa / Operator -->
+              <div class="test-account-item">
+                <div class="test-account-info">
+                  <span class="test-account-name">
+                    <span class="badge badge-lansia" style="font-size: 0.7rem; padding: 2px 7px;">USER</span>
+                    Avery Perez
+                  </span>
+                  <span class="test-account-meta">user: <strong>averyp</strong> · pass: <strong>averyppass</strong></span>
+                </div>
+                <button
+                  type="button"
+                  class="btn-fill-account"
+                  data-user="averyp"
+                  data-pass="averyppass"
+                  title="Gunakan akun ini untuk uji coba"
+                >
+                  Gunakan
+                </button>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
