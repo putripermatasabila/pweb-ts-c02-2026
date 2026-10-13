@@ -51,13 +51,30 @@
       return null;
     }
   }
-  var LS_QUEUE_TYPES, LS_TICKETS, LS_SESSION;
+  function sortTicketsByPriority(tickets) {
+    return [...tickets].sort((a, b) => {
+      var _a, _b;
+      const rankA = (_a = PRIORITY_RANKS[a.prioritas]) != null ? _a : 99;
+      const rankB = (_b = PRIORITY_RANKS[b.prioritas]) != null ? _b : 99;
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+      return a.timestamp - b.timestamp;
+    });
+  }
+  var LS_QUEUE_TYPES, LS_TICKETS, LS_SESSION, PRIORITY_RANKS;
   var init_types = __esm({
     "src/types.ts"() {
       "use strict";
       LS_QUEUE_TYPES = "queueTypes";
       LS_TICKETS = "tickets";
       LS_SESSION = "currentSession";
+      PRIORITY_RANKS = {
+        VIP: 1,
+        Disabilitas: 2,
+        Lansia: 3,
+        Normal: 4
+      };
     }
   });
 
@@ -81,6 +98,13 @@
         const called = getTickets().filter((t) => t.jenis === kode && t.status === "Dipanggil").sort((a, b) => b.timestamp - a.timestamp);
         return called[0];
       }
+      function getNextWaitingTicket(kode) {
+        const waiting = getTickets().filter(
+          (t) => t.jenis === kode && t.status === "Menunggu"
+        );
+        const sorted = sortTicketsByPriority(waiting);
+        return sorted[0];
+      }
       function waitingCount(kode) {
         return getTickets().filter(
           (t) => t.jenis === kode && t.status === "Menunggu"
@@ -94,6 +118,7 @@
         card.querySelector(".code-badge").textContent = jenis.kode;
         const calledNumberEl = card.querySelector(".called-number");
         const waitingEl = card.querySelector(".waiting-count");
+        const nextQueueNumEl = card.querySelector(".next-queue-num");
         const called = getCalledTicket(jenis.kode);
         if (called) {
           calledNumberEl.textContent = called.nomorTiket;
@@ -101,22 +126,39 @@
         } else {
           card.classList.add("is-empty");
         }
+        const nextTicket = getNextWaitingTicket(jenis.kode);
+        if (nextQueueNumEl) {
+          nextQueueNumEl.textContent = nextTicket ? nextTicket.nomorTiket : "-";
+        }
         waitingEl.textContent = String(waitingCount(jenis.kode));
         displayGrid.appendChild(card);
       }
       function updateCard(jenis) {
+        var _a;
         const card = displayGrid.querySelector(
           `[data-kode="${jenis.kode}"]`
         );
         if (!card) return;
         const calledNumberEl = card.querySelector(".called-number");
         const waitingEl = card.querySelector(".waiting-count");
+        const nextQueueNumEl = card.querySelector(".next-queue-num");
         const called = getCalledTicket(jenis.kode);
+        const previousNumber = ((_a = calledNumberEl.textContent) == null ? void 0 : _a.trim()) || "";
         if (called) {
+          if (previousNumber !== called.nomorTiket && previousNumber !== "") {
+            calledNumberEl.classList.remove("flash");
+            void calledNumberEl.offsetWidth;
+            calledNumberEl.classList.add("flash");
+          }
           calledNumberEl.textContent = called.nomorTiket;
           card.classList.remove("is-empty");
         } else {
           card.classList.add("is-empty");
+          calledNumberEl.textContent = "";
+        }
+        const nextTicket = getNextWaitingTicket(jenis.kode);
+        if (nextQueueNumEl) {
+          nextQueueNumEl.textContent = nextTicket ? nextTicket.nomorTiket : "-";
         }
         waitingEl.textContent = String(waitingCount(jenis.kode));
       }

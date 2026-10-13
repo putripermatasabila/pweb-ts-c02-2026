@@ -59,6 +59,7 @@ const ticketService = document.getElementById("ticket-service") as HTMLSpanEleme
 const ticketPriority = document.getElementById("ticket-priority") as HTMLSpanElement;
 const ticketWaiting = document.getElementById("ticket-waiting") as HTMLSpanElement;
 const ticketClose = document.getElementById("ticket-close") as HTMLButtonElement;
+const ticketPrint = document.getElementById("ticket-print") as HTMLButtonElement | null;
 const ticketPatientName = document.getElementById("ticket-patient-name") as HTMLElement;
 
 // ============================================================
@@ -185,6 +186,14 @@ function renderCard(jenis: JenisAntrian): void {
   (card.querySelector(".service-name") as HTMLElement).textContent = jenis.nama;
   (card.querySelector(".code-badge") as HTMLElement).textContent = jenis.kode;
 
+  // Tampilkan badge jumlah orang yang sedang menunggu
+  const waitingEl = card.querySelector(".waiting-badge") as HTMLElement | null;
+  if (waitingEl) {
+    const count = waitingCount(jenis.kode);
+    waitingEl.textContent = count > 0 ? `⏳ ${count} Menunggu` : "🟢 Tidak Ada Antrian";
+    waitingEl.className = count > 0 ? "waiting-badge has-queue" : "waiting-badge is-empty";
+  }
+
   // Pasang event handler untuk semua tombol ambil nomor
   card.querySelectorAll<HTMLButtonElement>(".btn-take").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -237,7 +246,7 @@ function init(): void {
 
   // Sinkronisasi instan via event storage
   window.addEventListener("storage", (e) => {
-    if (e.key === LS_QUEUE_TYPES) {
+    if (e.key === LS_QUEUE_TYPES || e.key === "tickets") {
       render();
     }
   });
@@ -246,6 +255,13 @@ function init(): void {
   ticketClose.addEventListener("click", () => {
     dialog.close();
   });
+
+  // Tombol cetak tiket
+  if (ticketPrint) {
+    ticketPrint.addEventListener("click", () => {
+      window.print();
+    });
+  }
 
   // Tutup dialog jika klik di luar area dialog
   dialog.addEventListener("click", (e) => {

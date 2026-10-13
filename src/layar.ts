@@ -2,6 +2,7 @@ import {
   getQueueTypes,
   getTickets,
   getSession,
+  sortTicketsByPriority,
   JenisAntrian,
   Tiket,
   LS_QUEUE_TYPES,
@@ -34,6 +35,17 @@ function getCalledTicket(kode: string): Tiket | undefined {
 }
 
 // ============================================================
+// Tiket menunggu berikutnya berdasarkan prioritas
+// ============================================================
+function getNextWaitingTicket(kode: string): Tiket | undefined {
+  const waiting = getTickets().filter(
+    (t) => t.jenis === kode && t.status === "Menunggu"
+  );
+  const sorted = sortTicketsByPriority(waiting);
+  return sorted[0];
+}
+
+// ============================================================
 // Jumlah tiket menunggu untuk suatu jenis antrian
 // ============================================================
 function waitingCount(kode: string): number {
@@ -56,6 +68,7 @@ function renderCard(jenis: JenisAntrian): void {
 
   const calledNumberEl = card.querySelector(".called-number") as HTMLElement;
   const waitingEl = card.querySelector(".waiting-count") as HTMLElement;
+  const nextQueueNumEl = card.querySelector(".next-queue-num") as HTMLElement | null;
 
   const called = getCalledTicket(jenis.kode);
   if (called) {
@@ -63,6 +76,11 @@ function renderCard(jenis: JenisAntrian): void {
     card.classList.remove("is-empty");
   } else {
     card.classList.add("is-empty");
+  }
+
+  const nextTicket = getNextWaitingTicket(jenis.kode);
+  if (nextQueueNumEl) {
+    nextQueueNumEl.textContent = nextTicket ? nextTicket.nomorTiket : "-";
   }
 
   waitingEl.textContent = String(waitingCount(jenis.kode));
@@ -81,13 +99,28 @@ function updateCard(jenis: JenisAntrian): void {
 
   const calledNumberEl = card.querySelector(".called-number") as HTMLElement;
   const waitingEl = card.querySelector(".waiting-count") as HTMLElement;
+  const nextQueueNumEl = card.querySelector(".next-queue-num") as HTMLElement | null;
 
   const called = getCalledTicket(jenis.kode);
+  const previousNumber = calledNumberEl.textContent?.trim() || "";
+
   if (called) {
+    if (previousNumber !== called.nomorTiket && previousNumber !== "") {
+      calledNumberEl.classList.remove("flash");
+      // Force reflow untuk me-restart animasi
+      void calledNumberEl.offsetWidth;
+      calledNumberEl.classList.add("flash");
+    }
     calledNumberEl.textContent = called.nomorTiket;
     card.classList.remove("is-empty");
   } else {
     card.classList.add("is-empty");
+    calledNumberEl.textContent = "";
+  }
+
+  const nextTicket = getNextWaitingTicket(jenis.kode);
+  if (nextQueueNumEl) {
+    nextQueueNumEl.textContent = nextTicket ? nextTicket.nomorTiket : "-";
   }
 
   waitingEl.textContent = String(waitingCount(jenis.kode));

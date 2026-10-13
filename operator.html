@@ -255,16 +255,16 @@
                   <polygon points="5 4 15 12 5 20 5 4"></polygon>
                   <line x1="19" y1="5" x2="19" y2="19"></line>
                 </svg>
-                Lewati (Ke Belakang)
+                Lewati ke Belakang
               </button>
 
-              <!-- Tombol Tandai Dilewati -->
+              <!-- Tombol Tandai Tidak Hadir (Dilewati) -->
               <button
                 type="button"
                 id="btn-skip-mark"
                 class="btn btn-danger"
                 disabled
-                title="Tandai tiket ini sebagai status 'Dilewati' jika pasien tidak hadir"
+                title="Tandai tiket ini sebagai status 'Dilewati' karena pasien tidak hadir"
               >
                 <svg
                   width="18"
@@ -280,7 +280,7 @@
                   <line x1="15" y1="9" x2="9" y2="15"></line>
                   <line x1="9" y1="9" x2="15" y2="15"></line>
                 </svg>
-                Tandai Dilewati
+                Tandai Tidak Hadir
               </button>
             </div>
           </div>
@@ -360,10 +360,11 @@
             <button
               type="button"
               id="btn-seed-demo-tickets"
-              class="btn btn-sm btn-outline"
+              class="btn btn-sm btn-ghost"
+              style="font-size: 0.78rem; border-style: dashed;"
               title="Isi data uji tiket dengan ragam prioritas (VIP, Lansia, Disabilitas, Normal)"
             >
-              + Tiket Demo
+              ⚙️ Isi Tiket Uji
             </button>
           </div>
 

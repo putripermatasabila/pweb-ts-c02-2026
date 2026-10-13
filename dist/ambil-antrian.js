@@ -128,6 +128,7 @@
       var ticketPriority = document.getElementById("ticket-priority");
       var ticketWaiting = document.getElementById("ticket-waiting");
       var ticketClose = document.getElementById("ticket-close");
+      var ticketPrint = document.getElementById("ticket-print");
       var ticketPatientName = document.getElementById("ticket-patient-name");
       function setupUserProfile() {
         const session = getSession();
@@ -213,6 +214,12 @@
         const card = clone.querySelector(".type-card");
         card.querySelector(".service-name").textContent = jenis.nama;
         card.querySelector(".code-badge").textContent = jenis.kode;
+        const waitingEl = card.querySelector(".waiting-badge");
+        if (waitingEl) {
+          const count = waitingCount(jenis.kode);
+          waitingEl.textContent = count > 0 ? `\u23F3 ${count} Menunggu` : "\u{1F7E2} Tidak Ada Antrian";
+          waitingEl.className = count > 0 ? "waiting-badge has-queue" : "waiting-badge is-empty";
+        }
         card.querySelectorAll(".btn-take").forEach((btn) => {
           btn.addEventListener("click", () => {
             var _a;
@@ -244,13 +251,18 @@
         render();
         setInterval(render, 3e3);
         window.addEventListener("storage", (e) => {
-          if (e.key === LS_QUEUE_TYPES) {
+          if (e.key === LS_QUEUE_TYPES || e.key === "tickets") {
             render();
           }
         });
         ticketClose.addEventListener("click", () => {
           dialog.close();
         });
+        if (ticketPrint) {
+          ticketPrint.addEventListener("click", () => {
+            window.print();
+          });
+        }
         dialog.addEventListener("click", (e) => {
           if (e.target === dialog) dialog.close();
         });

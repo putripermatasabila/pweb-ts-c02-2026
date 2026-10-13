@@ -105,7 +105,10 @@
     <template id="type-card-template">
       <article class="card type-card">
         <header class="card-head">
-          <h2 class="service-name"></h2>
+          <div class="service-info">
+            <h2 class="service-name"></h2>
+            <span class="waiting-badge" title="Status antrian di poli ini">Memuat antrian...</span>
+          </div>
           <span class="code-badge" aria-label="Kode antrian"></span>
         </header>
         <button
@@ -113,34 +116,37 @@
           class="btn btn-primary btn-block btn-take"
           data-priority="Normal"
         >
-          Ambil nomor reguler
+          Ambil Nomor (Normal)
         </button>
-        <details class="priority-box">
-          <summary>Perlu prioritas khusus?</summary>
+        <div class="priority-section">
+          <span class="priority-label">Atau ambil dengan jalur prioritas:</span>
           <div class="priority-options">
             <button
               type="button"
               class="btn btn-ghost btn-take"
               data-priority="Lansia"
+              title="Untuk pasien berusia 60 tahun ke atas"
             >
-              Lansia
+              👴 Lansia
             </button>
             <button
               type="button"
               class="btn btn-ghost btn-take"
               data-priority="Disabilitas"
+              title="Untuk pasien penyandang disabilitas"
             >
-              Disabilitas
+              ♿ Disabilitas
             </button>
             <button
               type="button"
               class="btn btn-ghost btn-take"
               data-priority="VIP"
+              title="Untuk pasien jalur VIP"
             >
-              VIP
+              ⭐ VIP
             </button>
           </div>
-        </details>
+        </div>
       </article>
     </template>
 
@@ -149,7 +155,7 @@
       class="ticket-dialog"
       aria-labelledby="ticket-title"
     >
-      <h2 id="ticket-title" class="service-name">Nomor antrian kamu</h2>
+      <h2 id="ticket-title" class="service-name">Nomor Antrian Anda</h2>
       <p class="ticket-meta ticket-patient-box" id="ticket-patient-box">
         Pasien: <strong id="ticket-patient-name">-</strong>
       </p>
@@ -158,9 +164,14 @@
         <span id="ticket-service"></span> <span id="ticket-priority"></span>
       </p>
       <p class="ticket-meta"><span id="ticket-waiting"></span></p>
-      <button type="button" id="ticket-close" class="btn btn-primary btn-block">
-        Selesai
-      </button>
+      <div class="ticket-dialog-actions" style="display: flex; gap: 10px; margin-top: 14px;">
+        <button type="button" id="ticket-print" class="btn btn-ghost" style="flex: 1;">
+          🖨️ Cetak Tiket
+        </button>
+        <button type="button" id="ticket-close" class="btn btn-primary" style="flex: 1;">
+          Selesai
+        </button>
+      </div>
     </dialog>
 
     <!-- Jika tim memakai import antar file, ganti menjadi: <script type="module" src="dist/ambil-antrian.js"></script> -->
