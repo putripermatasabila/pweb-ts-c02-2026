@@ -137,6 +137,9 @@
           if (roleNormalized === "admin" || roleNormalized === "moderator") {
             destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
             destinationLabel = "Dashboard Admin";
+          } else if (roleNormalized === "operator") {
+            destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "operator.html";
+            destinationLabel = "Panel Operator";
           } else {
             destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
             destinationLabel = "Ambil Nomor Antrian";
@@ -242,6 +245,8 @@
           let targetUrl = "ambil-antrian.html";
           if (role === "admin" || role === "moderator") {
             targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
+          } else if (role === "operator") {
+            targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "operator.html";
           } else {
             targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
           }

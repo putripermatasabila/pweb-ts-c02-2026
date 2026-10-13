@@ -140,3 +140,24 @@ export function sortTicketsByPriority(tickets: Tiket[]): Tiket[] {
   });
 }
 
+// ============================================================
+// Helper Generator Nomor Tiket Konsisten
+// Format: {KODE}-{001}, misal A-001, B-001
+// Robust terhadap tiket yang dihapus atau antrian yang direset
+// ============================================================
+export function getNextTicketNumber(kode: string, tickets: Tiket[] = getTickets()): string {
+  const existing = tickets.filter((t) => t.jenis === kode);
+  let maxNum = 0;
+  for (const t of existing) {
+    const parts = t.nomorTiket.split("-");
+    if (parts.length === 2) {
+      const num = parseInt(parts[1], 10);
+      if (!isNaN(num) && num > maxNum) {
+        maxNum = num;
+      }
+    }
+  }
+  const nextNum = Math.max(maxNum + 1, existing.length + 1);
+  return `${kode}-${String(nextNum).padStart(3, "0")}`;
+}
+

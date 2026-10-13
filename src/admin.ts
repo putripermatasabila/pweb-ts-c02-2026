@@ -17,6 +17,7 @@ import {
   saveTickets,
   getSession,
   clearSession,
+  getNextTicketNumber,
   JenisAntrian,
   Tiket,
   Prioritas,
@@ -489,10 +490,7 @@ function renderManualTicketDropdown(): void {
 // 14. GENERATE NOMOR TIKET BERIKUTNYA SECARA KONSISTEN
 // ============================================================
 function generateNextTicketNumber(kode: string): string {
-  const tickets = getTickets();
-  const existing = tickets.filter((t) => t.jenis === kode);
-  const nextNumber = existing.length + 1;
-  return `${kode}-${String(nextNumber).padStart(3, "0")}`;
+  return getNextTicketNumber(kode);
 }
 
 // ============================================================

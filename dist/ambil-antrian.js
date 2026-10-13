@@ -62,6 +62,21 @@
     localStorage.removeItem("firstName");
     localStorage.removeItem("username");
   }
+  function getNextTicketNumber(kode, tickets = getTickets()) {
+    const existing = tickets.filter((t) => t.jenis === kode);
+    let maxNum = 0;
+    for (const t of existing) {
+      const parts = t.nomorTiket.split("-");
+      if (parts.length === 2) {
+        const num = parseInt(parts[1], 10);
+        if (!isNaN(num) && num > maxNum) {
+          maxNum = num;
+        }
+      }
+    }
+    const nextNum = Math.max(maxNum + 1, existing.length + 1);
+    return `${kode}-${String(nextNum).padStart(3, "0")}`;
+  }
   var LS_QUEUE_TYPES, LS_TICKETS, LS_SESSION;
   var init_types = __esm({
     "src/types.ts"() {
@@ -157,10 +172,7 @@
         }
       }
       function nextTicketNumber(kode) {
-        const tickets = getTickets();
-        const existing = tickets.filter((t) => t.jenis === kode);
-        const next = existing.length + 1;
-        return `${kode}-${String(next).padStart(3, "0")}`;
+        return getNextTicketNumber(kode);
       }
       function waitingCount(kode) {
         return getTickets().filter(

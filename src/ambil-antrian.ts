@@ -4,6 +4,7 @@ import {
   saveTickets,
   getSession,
   clearSession,
+  getNextTicketNumber,
   JenisAntrian,
   Tiket,
   Prioritas,
@@ -119,10 +120,7 @@ function setupUserProfile(): void {
 // Format: {kode}-{nomor 3 digit}, misal "A-001"
 // ============================================================
 function nextTicketNumber(kode: string): string {
-  const tickets = getTickets();
-  const existing = tickets.filter((t) => t.jenis === kode);
-  const next = existing.length + 1;
-  return `${kode}-${String(next).padStart(3, "0")}`;
+  return getNextTicketNumber(kode);
 }
 
 // ============================================================
