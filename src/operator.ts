@@ -667,8 +667,14 @@ function init(): void {
   // Tampilkan data sesi pengguna
   const session = getSession();
   if (session) {
-    userNameEl.textContent = session.firstName || session.username || "Operator";
+    const displayName = session.firstName || session.username || "Operator";
+    userNameEl.textContent = displayName;
     userRoleEl.textContent = (session.role || "Operator").toUpperCase();
+
+    const userAvatarEl = document.getElementById("user-avatar");
+    if (userAvatarEl) {
+      userAvatarEl.textContent = displayName.slice(0, 2).toUpperCase();
+    }
 
     const roleNormalized = (session.role || "").toLowerCase();
     const navAdmin = document.getElementById("operator-nav-admin");

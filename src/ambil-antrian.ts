@@ -99,9 +99,20 @@ function setupUserProfile(): void {
           ? "inline-block"
           : "none";
     }
+    const navOperator = document.getElementById("nav-item-operator");
+    if (navOperator) {
+      navOperator.style.display =
+        roleNormalized === "admin" ||
+        roleNormalized === "moderator" ||
+        roleNormalized === "operator"
+          ? "inline-block"
+          : "none";
+    }
   } else {
     const navAdmin = document.getElementById("nav-item-admin");
     if (navAdmin) navAdmin.style.display = "none";
+    const navOperator = document.getElementById("nav-item-operator");
+    if (navOperator) navOperator.style.display = "none";
     if (userBadge) userBadge.style.display = "none";
     if (btnLogout) btnLogout.style.display = "none";
     if (btnLoginNav) btnLoginNav.style.display = "inline-flex";

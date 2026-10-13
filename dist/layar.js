@@ -233,17 +233,19 @@
             if (role === "admin" || role === "moderator") {
               destination = "index.html";
               destTitle = "Dashboard Admin";
+              const navAdmin = document.getElementById("nav-item-admin");
+              if (navAdmin) navAdmin.style.display = "inline-block";
+              const navOp = document.getElementById("nav-item-operator");
+              if (navOp) navOp.style.display = "inline-block";
             } else if (role === "operator") {
               destination = "operator.html";
               destTitle = "Panel Operator";
+              const navOp = document.getElementById("nav-item-operator");
+              if (navOp) navOp.style.display = "inline-block";
             }
             btnLoginLayar.textContent = destTitle;
             btnLoginLayar.href = destination;
             btnLoginLayar.title = `Buka ${destTitle}`;
-            if (role === "admin" || role === "moderator" || role === "operator") {
-              const takeTicketLink = document.getElementById("nav-take-ticket");
-              if (takeTicketLink) takeTicketLink.remove();
-            }
           }
         }
         seedIfEmpty();
