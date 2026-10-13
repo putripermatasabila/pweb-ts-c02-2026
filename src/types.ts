@@ -18,6 +18,8 @@ export interface Tiket {
   prioritas: Prioritas;
   status: StatusTiket;
   timestamp: number; // Date.now()
+  namaPengambil?: string; // Nama user yang login dan mengambil tiket
+  userId?: number | string; // ID user dari session
 }
 
 // ============================================================

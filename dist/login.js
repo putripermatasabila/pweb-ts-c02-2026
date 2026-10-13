@@ -130,12 +130,22 @@
         const session = getSession();
         if (session && session.token) {
           const roleNormalized = (session.role || "").toLowerCase();
-          const destination = roleNormalized === "admin" || roleNormalized === "moderator" ? "index.html" : "operator.html";
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectParam = urlParams.get("redirect");
+          let destination = "ambil-antrian.html";
+          let destinationLabel = "Ambil Nomor Antrian";
+          if (roleNormalized === "admin" || roleNormalized === "moderator") {
+            destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
+            destinationLabel = "Dashboard Admin";
+          } else {
+            destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
+            destinationLabel = "Ambil Nomor Antrian";
+          }
           if (alreadyLoggedBox && loggedUsername && loggedRole) {
             loggedUsername.textContent = session.firstName || session.username || "Pengguna";
             loggedRole.textContent = roleNormalized.toUpperCase();
             btnContinueSession.href = destination;
-            btnContinueSession.textContent = `Lanjut ke ${roleNormalized === "admin" || roleNormalized === "moderator" ? "Dashboard Admin" : "Panel Operator"}`;
+            btnContinueSession.textContent = `Lanjut ke ${destinationLabel}`;
             alreadyLoggedBox.hidden = false;
           }
         }
@@ -227,7 +237,14 @@
           showSuccess(
             `Login berhasil! Selamat datang, ${session.firstName}. Mengalihkan...`
           );
-          const targetUrl = role === "admin" || role === "moderator" ? "index.html" : "operator.html";
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectParam = urlParams.get("redirect");
+          let targetUrl = "ambil-antrian.html";
+          if (role === "admin" || role === "moderator") {
+            targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
+          } else {
+            targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
+          }
           setTimeout(() => {
             window.location.replace(targetUrl);
           }, 600);

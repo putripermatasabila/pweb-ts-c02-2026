@@ -93,21 +93,26 @@ function checkExistingSession(): void {
   const session = getSession();
   if (session && session.token) {
     const roleNormalized = (session.role || "").toLowerCase();
-    const destination =
-      roleNormalized === "admin" || roleNormalized === "moderator"
-        ? "index.html"
-        : "operator.html";
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get("redirect");
+
+    let destination = "ambil-antrian.html";
+    let destinationLabel = "Ambil Nomor Antrian";
+
+    if (roleNormalized === "admin" || roleNormalized === "moderator") {
+      destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
+      destinationLabel = "Dashboard Admin";
+    } else {
+      destination = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
+      destinationLabel = "Ambil Nomor Antrian";
+    }
 
     // Tampilkan banner bahwa sesi masih aktif
     if (alreadyLoggedBox && loggedUsername && loggedRole) {
       loggedUsername.textContent = session.firstName || session.username || "Pengguna";
       loggedRole.textContent = roleNormalized.toUpperCase();
       btnContinueSession.href = destination;
-      btnContinueSession.textContent = `Lanjut ke ${
-        roleNormalized === "admin" || roleNormalized === "moderator"
-          ? "Dashboard Admin"
-          : "Panel Operator"
-      }`;
+      btnContinueSession.textContent = `Lanjut ke ${destinationLabel}`;
       alreadyLoggedBox.hidden = false;
     }
   }
@@ -238,11 +243,16 @@ async function handleLogin(e: Event): Promise<void> {
 
     // 5. Aturan Hak Akses & Auto Redirect Berdasarkan Role:
     // Moderator diperlakukan setara dengan Admin -> ke index.html
-    // User biasa -> ke operator.html
-    const targetUrl =
-      role === "admin" || role === "moderator"
-        ? "index.html"
-        : "operator.html";
+    // User biasa (pasien) -> ke ambil-antrian.html (atau redirect param)
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get("redirect");
+
+    let targetUrl = "ambil-antrian.html";
+    if (role === "admin" || role === "moderator") {
+      targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "index.html";
+    } else {
+      targetUrl = redirectParam && redirectParam.includes(".html") ? redirectParam : "ambil-antrian.html";
+    }
 
     setTimeout(() => {
       window.location.replace(targetUrl);
