@@ -92,7 +92,16 @@ function setupUserProfile(): void {
     }
 
     const roleNormalized = (session.role || "").toLowerCase();
+    const navAdmin = document.getElementById("nav-item-admin");
+    if (navAdmin) {
+      navAdmin.style.display =
+        roleNormalized === "admin" || roleNormalized === "moderator"
+          ? "inline-block"
+          : "none";
+    }
   } else {
+    const navAdmin = document.getElementById("nav-item-admin");
+    if (navAdmin) navAdmin.style.display = "none";
     if (userBadge) userBadge.style.display = "none";
     if (btnLogout) btnLogout.style.display = "none";
     if (btnLoginNav) btnLoginNav.style.display = "inline-flex";
