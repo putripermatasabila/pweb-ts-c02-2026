@@ -13,32 +13,6 @@
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="ambil-antrian.css" />
 
-    <!-- Auth Guard Eksekusi Awal: Wajib login untuk ambil antrian -->
-    <script>
-      (function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("demo") === "1" || urlParams.get("dev") === "1") {
-          return;
-        }
-        try {
-          const raw = localStorage.getItem("currentSession");
-          const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
-          if (!raw && !token) {
-            window.location.replace("login.html?redirect=ambil-antrian.html");
-            return;
-          }
-          const session = raw ? JSON.parse(raw) : null;
-          const role = (localStorage.getItem("role") || (session && session.role) || "").toLowerCase();
-          if (role === "admin" || role === "moderator") {
-            window.location.replace("index.html");
-          } else if (role === "operator") {
-            window.location.replace("operator.html");
-          }
-        } catch (e) {
-          window.location.replace("login.html?redirect=ambil-antrian.html");
-        }
-      })();
-    </script>
   </head>
   <body>
     <div class="shell">

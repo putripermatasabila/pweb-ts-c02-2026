@@ -16,22 +16,18 @@ import {
 // Sesuai revisi: Semua user harus login untuk mengambil antrian
 // ============================================================
 function enforceAuthGuard(): boolean {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get("demo") === "1" || urlParams.get("dev") === "1") {
-    return true;
-  }
   const session = getSession();
   if (!session || !session.token) {
     window.location.replace("login.html?redirect=ambil-antrian.html");
     return false;
   }
   const role = (session.role || "").toLowerCase();
-  if (role === "admin" || role === "moderator") {
-    window.location.replace("index.html");
-    return false;
-  }
   if (role === "operator") {
     window.location.replace("operator.html");
+    return false;
+  }
+  if (role !== "user" && role !== "admin" && role !== "moderator") {
+    window.location.replace("login.html?redirect=ambil-antrian.html");
     return false;
   }
   return true;
@@ -123,9 +119,12 @@ function nextTicketNumber(kode: string): string {
 // ============================================================
 // Hitung tiket menunggu untuk jenis tertentu
 // ============================================================
-function waitingCount(kode: string): number {
+function waitingCount(kode: string, excludeTicketNumber?: string): number {
   return getTickets().filter(
-    (t) => t.jenis === kode && t.status === "Menunggu"
+    (t) =>
+      t.jenis === kode &&
+      t.status === "Menunggu" &&
+      t.nomorTiket !== excludeTicketNumber
   ).length;
 }
 
@@ -168,9 +167,11 @@ function showTicketDialog(tiket: Tiket, namaLayanan: string): void {
   if (ticketPatientName) {
     ticketPatientName.textContent = tiket.namaPengambil || "Pengguna";
   }
-  const count = waitingCount(tiket.jenis);
+  const count = waitingCount(tiket.jenis, tiket.nomorTiket);
   ticketWaiting.textContent =
-    count > 0 ? `${count} orang menunggu di depan kamu` : "Kamu yang pertama!";
+    count > 0
+      ? `${count} tiket lain menunggu untuk layanan ini`
+      : "Kamu tiket menunggu pertama!";
   dialog.showModal();
 }
 

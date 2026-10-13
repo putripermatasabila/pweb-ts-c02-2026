@@ -92,22 +92,18 @@
     "src/ambil-antrian.ts"() {
       init_types();
       function enforceAuthGuard() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("demo") === "1" || urlParams.get("dev") === "1") {
-          return true;
-        }
         const session = getSession();
         if (!session || !session.token) {
           window.location.replace("login.html?redirect=ambil-antrian.html");
           return false;
         }
         const role = (session.role || "").toLowerCase();
-        if (role === "admin" || role === "moderator") {
-          window.location.replace("index.html");
-          return false;
-        }
         if (role === "operator") {
           window.location.replace("operator.html");
+          return false;
+        }
+        if (role !== "user" && role !== "admin" && role !== "moderator") {
+          window.location.replace("login.html?redirect=ambil-antrian.html");
           return false;
         }
         return true;
@@ -175,9 +171,9 @@
       function nextTicketNumber(kode) {
         return getNextTicketNumber(kode);
       }
-      function waitingCount(kode) {
+      function waitingCount(kode, excludeTicketNumber) {
         return getTickets().filter(
-          (t) => t.jenis === kode && t.status === "Menunggu"
+          (t) => t.jenis === kode && t.status === "Menunggu" && t.nomorTiket !== excludeTicketNumber
         ).length;
       }
       function createTicket(jenis, prioritas) {
@@ -208,8 +204,8 @@
         if (ticketPatientName) {
           ticketPatientName.textContent = tiket.namaPengambil || "Pengguna";
         }
-        const count = waitingCount(tiket.jenis);
-        ticketWaiting.textContent = count > 0 ? `${count} orang menunggu di depan kamu` : "Kamu yang pertama!";
+        const count = waitingCount(tiket.jenis, tiket.nomorTiket);
+        ticketWaiting.textContent = count > 0 ? `${count} tiket lain menunggu untuk layanan ini` : "Kamu tiket menunggu pertama!";
         dialog.showModal();
       }
       function renderCard(jenis) {
