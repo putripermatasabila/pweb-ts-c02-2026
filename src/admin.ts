@@ -57,7 +57,11 @@ function enforceAdminGuard(): boolean {
   // Role moderator diperlakukan setara dengan admin
   if (role !== "admin" && role !== "moderator") {
     alert("Akses ditolak: Anda tidak memiliki hak akses Administrator.");
-    window.location.replace("login.html");
+    if (role === "operator") {
+      window.location.replace("operator.html");
+    } else {
+      window.location.replace("ambil-antrian.html");
+    }
     return false;
   }
 

@@ -34,7 +34,11 @@
 
           // Role Guard: hanya admin atau moderator yang boleh mengakses
           if (role !== "admin" && role !== "moderator") {
-            window.location.replace("operator.html");
+            if (role === "operator") {
+              window.location.replace("operator.html");
+            } else {
+              window.location.replace("ambil-antrian.html");
+            }
           }
         } catch (e) {
           window.location.replace("login.html");

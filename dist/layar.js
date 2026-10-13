@@ -186,10 +186,18 @@
           const session = getSession();
           if (session && session.token) {
             const role = (session.role || "").toLowerCase();
-            const destination = role === "admin" || role === "moderator" ? "index.html" : "ambil-antrian.html";
+            let destination = "ambil-antrian.html";
+            let destTitle = "Ambil Antrian";
+            if (role === "admin" || role === "moderator") {
+              destination = "index.html";
+              destTitle = "Dashboard Admin";
+            } else if (role === "operator") {
+              destination = "operator.html";
+              destTitle = "Panel Operator";
+            }
             btnLoginLayar.textContent = session.firstName || session.username || "Akun Saya";
             btnLoginLayar.href = destination;
-            btnLoginLayar.title = `Buka ${role === "admin" || role === "moderator" ? "Dashboard Admin" : "Ambil Antrian"}`;
+            btnLoginLayar.title = `Buka ${destTitle}`;
           }
         }
         seedIfEmpty();

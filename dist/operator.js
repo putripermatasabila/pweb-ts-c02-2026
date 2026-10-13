@@ -228,7 +228,13 @@
         }
         const session = getSession();
         if (!session || !session.token) {
-          window.location.replace("login.html");
+          window.location.replace("login.html?redirect=operator.html");
+          return false;
+        }
+        const role = (session.role || "").toLowerCase();
+        if (role === "user") {
+          alert("Akses ditolak: Pasien tidak memiliki izin untuk mengakses Panel Operator.");
+          window.location.replace("ambil-antrian.html");
           return false;
         }
         return true;

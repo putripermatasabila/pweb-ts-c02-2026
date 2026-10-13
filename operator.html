@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="global.css" />
     <link rel="stylesheet" href="operator.css" />
 
-    <!-- Auth Guard Eksekusi Awal: Cegah flicker halaman jika belum login -->
+    <!-- Auth & Role Guard Eksekusi Awal: Cegah flicker halaman jika belum login atau bukan operator/admin -->
     <script>
       (function () {
         const urlParams = new URLSearchParams(window.location.search);
@@ -22,9 +22,18 @@
         }
         try {
           const raw = localStorage.getItem("currentSession");
+          let session = raw ? JSON.parse(raw) : null;
           const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
-          if (!raw && !token) {
-            window.location.replace("login.html");
+          const role = (localStorage.getItem("role") || (session && session.role) || "").toLowerCase();
+
+          if (!session && !token) {
+            window.location.replace("login.html?redirect=operator.html");
+            return;
+          }
+
+          // Role Guard: Pasien (user) dilarang mengakses Panel Operator
+          if (role === "user") {
+            window.location.replace("ambil-antrian.html");
           }
         } catch (e) {
           window.location.replace("login.html");
