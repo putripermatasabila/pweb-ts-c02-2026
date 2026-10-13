@@ -25,6 +25,15 @@ function enforceAuthGuard(): boolean {
     window.location.replace("login.html?redirect=ambil-antrian.html");
     return false;
   }
+  const role = (session.role || "").toLowerCase();
+  if (role === "admin" || role === "moderator") {
+    window.location.replace("index.html");
+    return false;
+  }
+  if (role === "operator") {
+    window.location.replace("operator.html");
+    return false;
+  }
   return true;
 }
 
@@ -86,18 +95,6 @@ function setupUserProfile(): void {
     }
 
     const roleNormalized = (session.role || "").toLowerCase();
-    const navAdmin = document.getElementById("nav-item-admin");
-    const navOperator = document.getElementById("nav-item-operator");
-    if (navAdmin) {
-      navAdmin.style.display =
-        roleNormalized === "admin" || roleNormalized === "moderator"
-          ? "inline-block"
-          : "none";
-    }
-    if (navOperator) {
-      navOperator.style.display =
-        roleNormalized === "operator" ? "inline-block" : "none";
-    }
   } else {
     if (userBadge) userBadge.style.display = "none";
     if (btnLogout) btnLogout.style.display = "none";

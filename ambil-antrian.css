@@ -147,7 +147,7 @@ body {
 /* Hero dan judul halaman */
 .hero {
   text-align: center;
-  padding: 44px 0 28px;
+  padding: 40px 0 28px;
 }
 
 .badge {
@@ -177,11 +177,55 @@ body {
   color: var(--muted);
 }
 
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 16px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.section-heading p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.queue-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  color: var(--primary);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.queue-step span {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 /* Grid dan kartu */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 16px;
+}
+
+#type-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 320px));
+  justify-content: center;
 }
 
 .card {
@@ -193,6 +237,17 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-soft);
+}
+
+.type-card {
+  min-height: 190px;
+  justify-content: space-between;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.type-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(30, 50, 110, 0.13);
 }
 
 .card-head {
@@ -240,6 +295,11 @@ body {
   font-weight: 600;
   color: var(--muted);
   padding: 4px 0;
+}
+
+.priority-box[open] summary {
+  margin-bottom: 2px;
+  color: var(--primary);
 }
 
 .priority-options {
@@ -343,7 +403,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn { transition: none; }
+  .btn, .type-card { transition: none; }
   .ticket-dialog[open] { animation: none; }
 }
 
@@ -375,4 +435,8 @@ body {
     padding: 4px 2px;
   }
   .shell { padding: 12px 12px 36px; }
+  .hero { padding: 32px 0 24px; }
+  .section-heading { align-items: flex-start; }
+  .section-heading p { max-width: 250px; }
+  .type-card { min-height: 0; }
 }

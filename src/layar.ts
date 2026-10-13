@@ -190,7 +190,7 @@ function init(): void {
     if (session && session.token) {
       const role = (session.role || "").toLowerCase();
       let destination = "ambil-antrian.html";
-      let destTitle = "Ambil Antrian";
+      let destTitle = "Ambil Nomor";
 
       if (role === "admin" || role === "moderator") {
         destination = "index.html";
@@ -200,9 +200,14 @@ function init(): void {
         destTitle = "Panel Operator";
       }
 
-      btnLoginLayar.textContent = session.firstName || session.username || "Akun Saya";
+      btnLoginLayar.textContent = destTitle;
       btnLoginLayar.href = destination;
       btnLoginLayar.title = `Buka ${destTitle}`;
+
+      if (role === "admin" || role === "moderator" || role === "operator") {
+        const takeTicketLink = document.getElementById("nav-take-ticket");
+        if (takeTicketLink) takeTicketLink.remove();
+      }
     }
   }
 

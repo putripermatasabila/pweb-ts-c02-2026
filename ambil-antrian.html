@@ -25,6 +25,14 @@
           const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
           if (!raw && !token) {
             window.location.replace("login.html?redirect=ambil-antrian.html");
+            return;
+          }
+          const session = raw ? JSON.parse(raw) : null;
+          const role = (localStorage.getItem("role") || (session && session.role) || "").toLowerCase();
+          if (role === "admin" || role === "moderator") {
+            window.location.replace("index.html");
+          } else if (role === "operator") {
+            window.location.replace("operator.html");
           }
         } catch (e) {
           window.location.replace("login.html?redirect=ambil-antrian.html");
@@ -49,12 +57,6 @@
           <li><a href="layar.html">Layar Antrian</a></li>
           <li>
             <a href="ambil-antrian.html" aria-current="page">Ambil Nomor</a>
-          </li>
-          <li id="nav-item-admin" style="display: none;">
-            <a href="index.html">Dashboard Admin</a>
-          </li>
-          <li id="nav-item-operator" style="display: none;">
-            <a href="operator.html">Panel Operator</a>
           </li>
         </ul>
         <div class="nav-actions" id="user-nav-actions">
@@ -98,7 +100,7 @@
       </nav>
 
       <header class="hero">
-        <span class="badge">Layanan mandiri pengunjung</span>
+        <span class="badge">AMBIL NOMOR ONLINE</span>
         <h1>Ambil Nomor Antrian<span>Tanpa Perlu Antre di Loket</span></h1>
         <p>
           Pilih layanan yang kamu tuju, <strong id="greeting-user">Pengunjung</strong>. Nomor langsung masuk ke antrian dan akan
@@ -107,6 +109,13 @@
       </header>
 
       <main>
+        <div class="section-heading">
+          <div>
+            <h2>Pilih layanan tujuan</h2>
+            <p>Pastikan poli atau layanan yang dipilih sudah sesuai.</p>
+          </div>
+          <span class="queue-step">1 <span>Pilih layanan</span></span>
+        </div>
         <!-- Kartu jenis antrian diisi oleh dist/ambil-antrian.js -->
         <section id="type-grid" class="card-grid" aria-live="polite"></section>
         <p id="empty-state" class="empty-state" hidden>
@@ -123,17 +132,17 @@
       <article class="card type-card">
         <header class="card-head">
           <h2 class="service-name"></h2>
-          <span class="code-badge"></span>
+          <span class="code-badge" aria-label="Kode antrian"></span>
         </header>
         <button
           type="button"
           class="btn btn-primary btn-block btn-take"
           data-priority="Normal"
         >
-          Ambil Nomor
+          Ambil nomor reguler
         </button>
         <details class="priority-box">
-          <summary>Ambil dengan prioritas</summary>
+          <summary>Perlu prioritas khusus?</summary>
           <div class="priority-options">
             <button
               type="button"
