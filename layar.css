@@ -276,6 +276,31 @@ body {
 }
 
 @media (max-width: 640px) {
-  .nav-links { display: none; }
+  .navbar {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    border-radius: 20px;
+    gap: 8px 12px;
+  }
+  .nav-links {
+    display: flex;
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    gap: 16px;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-links a {
+    font-size: 0.82rem;
+    white-space: nowrap;
+    padding: 4px 2px;
+  }
   .shell { padding: 12px 12px 36px; }
 }

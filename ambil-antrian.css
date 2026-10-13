@@ -249,12 +249,50 @@ body {
   margin-top: 10px;
 }
 
-.priority-options .btn { padding: 8px 6px; font-size: 0.8rem; }
+.priority-options .btn {
+  padding: 8px 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.priority-options .btn[data-priority="Lansia"] {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.priority-options .btn[data-priority="Lansia"]:hover {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+  transform: translateY(-1px);
+}
+
+.priority-options .btn[data-priority="Disabilitas"] {
+  background: #eff6ff;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+.priority-options .btn[data-priority="Disabilitas"]:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+}
+
+.priority-options .btn[data-priority="VIP"] {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+.priority-options .btn[data-priority="VIP"]:hover {
+  background: #fef3c7;
+  border-color: #fcd34d;
+  transform: translateY(-1px);
+}
 
 /* Dialog tiket */
 .ticket-dialog {
-  width: min(360px, 92vw);
-  padding: 28px 24px;
+  width: min(380px, 92vw);
+  padding: 32px 24px;
   text-align: center;
   color: var(--ink);
   background: #fff;
@@ -263,8 +301,23 @@ body {
   box-shadow: 0 24px 60px rgba(20, 30, 80, 0.25);
 }
 
+.ticket-dialog[open] {
+  animation: popInModal 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 .ticket-dialog::backdrop {
-  background: rgba(27, 32, 51, 0.4);
+  background: rgba(27, 32, 51, 0.45);
   backdrop-filter: blur(4px);
 }
 
@@ -291,9 +344,35 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .btn { transition: none; }
+  .ticket-dialog[open] { animation: none; }
 }
 
 @media (max-width: 640px) {
-  .nav-links { display: none; }
+  .navbar {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    border-radius: 20px;
+    gap: 8px 12px;
+  }
+  .nav-links {
+    display: flex;
+    order: 3;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    gap: 16px;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-links a {
+    font-size: 0.82rem;
+    white-space: nowrap;
+    padding: 4px 2px;
+  }
   .shell { padding: 12px 12px 36px; }
 }

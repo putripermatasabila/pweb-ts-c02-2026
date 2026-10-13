@@ -1,4 +1,11 @@
-import { getQueueTypes, getTickets, JenisAntrian, Tiket, LS_QUEUE_TYPES } from "./types";
+import {
+  getQueueTypes,
+  getTickets,
+  getSession,
+  JenisAntrian,
+  Tiket,
+  LS_QUEUE_TYPES,
+} from "./types";
 
 // ============================================================
 // Elemen DOM
@@ -12,6 +19,9 @@ const template = document.getElementById(
 const btnFullscreen = document.getElementById(
   "btn-fullscreen"
 ) as HTMLButtonElement;
+const btnLoginLayar = document.getElementById(
+  "btn-login-layar"
+) as HTMLAnchorElement | null;
 
 // ============================================================
 // Tiket "dipanggil" terakhir untuk suatu jenis antrian
@@ -174,6 +184,25 @@ function seedIfEmpty(): void {
 }
 
 function init(): void {
+  // Cek apakah ada sesi aktif untuk tombol navigasi
+  if (btnLoginLayar) {
+    const session = getSession();
+    if (session && session.token) {
+      const role = (session.role || "").toLowerCase();
+      const destination =
+        role === "admin" || role === "moderator"
+          ? "index.html"
+          : "ambil-antrian.html";
+      btnLoginLayar.textContent = session.firstName || session.username || "Akun Saya";
+      btnLoginLayar.href = destination;
+      btnLoginLayar.title = `Buka ${
+        role === "admin" || role === "moderator"
+          ? "Dashboard Admin"
+          : "Ambil Antrian"
+      }`;
+    }
+  }
+
   seedIfEmpty();
   syncDisplay();
 

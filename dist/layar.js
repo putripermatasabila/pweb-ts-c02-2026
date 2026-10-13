@@ -34,12 +34,30 @@
       return [];
     }
   }
-  var LS_QUEUE_TYPES, LS_TICKETS;
+  function getSession() {
+    try {
+      const raw = localStorage.getItem(LS_SESSION);
+      if (raw) {
+        return JSON.parse(raw);
+      }
+      const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+      const role = localStorage.getItem("role");
+      const firstName = localStorage.getItem("firstName") || localStorage.getItem("username");
+      if (token && role) {
+        return { token, role, firstName: firstName != null ? firstName : "" };
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+  var LS_QUEUE_TYPES, LS_TICKETS, LS_SESSION;
   var init_types = __esm({
     "src/types.ts"() {
       "use strict";
       LS_QUEUE_TYPES = "queueTypes";
       LS_TICKETS = "tickets";
+      LS_SESSION = "currentSession";
     }
   });
 
@@ -55,6 +73,9 @@
       );
       var btnFullscreen = document.getElementById(
         "btn-fullscreen"
+      );
+      var btnLoginLayar = document.getElementById(
+        "btn-login-layar"
       );
       function getCalledTicket(kode) {
         const called = getTickets().filter((t) => t.jenis === kode && t.status === "Dipanggil").sort((a, b) => b.timestamp - a.timestamp);
@@ -161,6 +182,16 @@
         }
       }
       function init() {
+        if (btnLoginLayar) {
+          const session = getSession();
+          if (session && session.token) {
+            const role = (session.role || "").toLowerCase();
+            const destination = role === "admin" || role === "moderator" ? "index.html" : "ambil-antrian.html";
+            btnLoginLayar.textContent = session.firstName || session.username || "Akun Saya";
+            btnLoginLayar.href = destination;
+            btnLoginLayar.title = `Buka ${role === "admin" || role === "moderator" ? "Dashboard Admin" : "Ambil Antrian"}`;
+          }
+        }
         seedIfEmpty();
         syncDisplay();
         setInterval(syncDisplay, 2e3);

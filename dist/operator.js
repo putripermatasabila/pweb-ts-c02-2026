@@ -658,6 +658,11 @@
         if (session) {
           userNameEl.textContent = session.firstName || session.username || "Operator";
           userRoleEl.textContent = (session.role || "Operator").toUpperCase();
+          const roleNormalized = (session.role || "").toLowerCase();
+          const navAdmin = document.getElementById("operator-nav-admin");
+          if (navAdmin) {
+            navAdmin.style.display = roleNormalized === "admin" || roleNormalized === "moderator" ? "inline-block" : "none";
+          }
         }
         btnLogout.addEventListener("click", () => {
           clearSession();

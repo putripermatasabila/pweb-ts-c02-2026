@@ -83,6 +83,20 @@ function setupUserProfile(): void {
     if (userAvatar) {
       userAvatar.textContent = displayName.slice(0, 2).toUpperCase();
     }
+
+    const roleNormalized = (session.role || "").toLowerCase();
+    const navAdmin = document.getElementById("nav-item-admin");
+    const navOperator = document.getElementById("nav-item-operator");
+    if (navAdmin) {
+      navAdmin.style.display =
+        roleNormalized === "admin" || roleNormalized === "moderator"
+          ? "inline-block"
+          : "none";
+    }
+    if (navOperator) {
+      navOperator.style.display =
+        roleNormalized === "operator" ? "inline-block" : "none";
+    }
   } else {
     if (userBadge) userBadge.style.display = "none";
     if (btnLogout) btnLogout.style.display = "none";
